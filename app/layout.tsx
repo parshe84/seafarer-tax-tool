@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { defaultLocale, getMessages } from "@/app/lib/i18n";
 import "./globals.css";
 
+const t = getMessages();
+
 export const metadata: Metadata = {
-  title: "Seafarer Tax Optimizer",
-  description:
-    "Узнай, какие налоговые льготы тебе положены как моряку, и сколько денег ты можешь сэкономить.",
+  title: t.meta.title,
+  description: t.meta.description,
 };
 
 export const viewport: Viewport = {
@@ -18,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru">
+    <html lang={defaultLocale}>
       <body>
         <div className="page">{children}</div>
       </body>

@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CalculatorResult } from "@/app/lib/types";
+import { getMessages } from "@/app/lib/i18n";
 
 const RESULT_STORAGE_KEY = "seafarer-tax-result";
+const t = getMessages();
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -33,10 +35,10 @@ export default function ResultsPage() {
     return (
       <div className="container">
         <div className="card">
-          <p>Результат не найден. Пожалуйста, заполните форму заново.</p>
+          <p>{t.results.notFoundMessage}</p>
           <div className="footer-actions">
             <button className="btn btn-primary" onClick={handleRestart}>
-              Начать заново
+              {t.results.restartButton}
             </button>
           </div>
         </div>
@@ -48,7 +50,7 @@ export default function ResultsPage() {
     return (
       <div className="container">
         <div className="card">
-          <p>Загрузка результата…</p>
+          <p>{t.results.loadingMessage}</p>
         </div>
       </div>
     );
@@ -57,11 +59,11 @@ export default function ResultsPage() {
   return (
     <div className="container">
       <header className="hero">
-        <h1>Ваш результат</h1>
+        <h1>{t.results.pageTitle}</h1>
       </header>
 
       <div className="savings-card">
-        <div className="label">Ориентировочная экономия</div>
+        <div className="label">{t.results.savingsLabel}</div>
         <div className="amount">
           ${result.estimatedSavingsUsd.toLocaleString("en-US")}
         </div>
@@ -69,7 +71,7 @@ export default function ResultsPage() {
       </div>
 
       <div className="card">
-        <div className="section-title">Чеклист действий</div>
+        <div className="section-title">{t.results.checklistTitle}</div>
         <ul className="checklist">
           {result.checklist.map((item, index) => (
             <li key={index}>
@@ -85,15 +87,11 @@ export default function ResultsPage() {
 
       <div className="footer-actions">
         <button className="btn btn-secondary" onClick={handleRestart}>
-          Начать заново
+          {t.results.restartButton}
         </button>
       </div>
 
-      <p className="disclaimer-box">
-        Сервис даёт ориентировочную оценку и не является налоговой
-        консультацией. Актуальные требования уточняйте у налогового
-        консультанта в вашей стране.
-      </p>
+      <p className="disclaimer-box">{t.common.disclaimer}</p>
     </div>
   );
 }

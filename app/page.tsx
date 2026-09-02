@@ -3,8 +3,10 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { COUNTRIES, type CalculatorInput } from "@/app/lib/types";
+import { getMessages } from "@/app/lib/i18n";
 
 const RESULT_STORAGE_KEY = "seafarer-tax-result";
+const t = getMessages();
 
 export default function HomePage() {
   const router = useRouter();
@@ -23,7 +25,7 @@ export default function HomePage() {
 
     const days = Number(daysAtSea);
     if (!daysAtSea || Number.isNaN(days) || days < 0 || days > 366) {
-      setError("Введите корректное количество дней в море (0–366).");
+      setError(t.home.validationError);
       return;
     }
 
@@ -45,18 +47,14 @@ export default function HomePage() {
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
-        throw new Error(data?.error ?? "Не удалось выполнить расчёт.");
+        throw new Error(data?.error ?? t.home.genericError);
       }
 
       const result = await response.json();
       sessionStorage.setItem(RESULT_STORAGE_KEY, JSON.stringify(result));
       router.push("/results");
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Произошла ошибка. Попробуйте ещё раз."
-      );
+      setError(err instanceof Error ? err.message : t.home.genericError);
       setIsSubmitting(false);
     }
   }
@@ -64,11 +62,8 @@ export default function HomePage() {
   return (
     <div className="container">
       <header className="hero">
-        <h1>Налоговый оптимизатор для моряков</h1>
-        <p>
-          Узнайте, какие налоговые льготы вам положены, и сколько денег вы
-          можете вернуть или сэкономить.
-        </p>
+        <h1>{t.home.heroTitle}</h1>
+        <p>{t.home.heroSubtitle}</p>
       </header>
 
       <div className="card">
@@ -76,7 +71,7 @@ export default function HomePage() {
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="field">
-            <label htmlFor="citizenship">Гражданство</label>
+            <label htmlFor="citizenship">{t.home.citizenshipLabel}</label>
             <select
               id="citizenship"
               value={citizenship}
@@ -91,9 +86,7 @@ export default function HomePage() {
           </div>
 
           <div className="field">
-            <label htmlFor="taxResidence">
-              Страна налогового резидентства
-            </label>
+            <label htmlFor="taxResidence">{t.home.taxResidenceLabel}</label>
             <select
               id="taxResidence"
               value={taxResidenceCountry}
@@ -108,14 +101,14 @@ export default function HomePage() {
           </div>
 
           <div className="field">
-            <label htmlFor="daysAtSea">Дней в море за последние 12 месяцев</label>
+            <label htmlFor="daysAtSea">{t.home.daysAtSeaLabel}</label>
             <input
               id="daysAtSea"
               type="number"
               inputMode="numeric"
               min={0}
               max={366}
-              placeholder="Например, 240"
+              placeholder={t.home.daysAtSeaPlaceholder}
               value={daysAtSea}
               onChange={(e) => setDaysAtSea(e.target.value)}
               required
@@ -124,31 +117,28 @@ export default function HomePage() {
 
           <div className="field">
             <label htmlFor="vesselFlag">
-              Флаг судна <span style={{ fontWeight: 400 }}>(необязательно)</span>
+              {t.home.vesselFlagLabel}{" "}
+              <span style={{ fontWeight: 400 }}>
+                {t.home.vesselFlagOptionalNote}
+              </span>
             </label>
             <input
               id="vesselFlag"
               type="text"
-              placeholder="Например, Panama"
+              placeholder={t.home.vesselFlagPlaceholder}
               value={vesselFlag}
               onChange={(e) => setVesselFlag(e.target.value)}
             />
-            <div className="hint">
-              Иногда влияет на применимость льгот в вашей стране.
-            </div>
+            <div className="hint">{t.home.vesselFlagHint}</div>
           </div>
 
           <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-            {isSubmitting ? "Считаем…" : "Рассчитать льготы"}
+            {isSubmitting ? t.home.submitButtonLoading : t.home.submitButton}
           </button>
         </form>
       </div>
 
-      <p className="disclaimer-box">
-        Сервис даёт ориентировочную оценку и не является налоговой
-        консультацией. Актуальные требования уточняйте у налогового
-        консультанта в вашей стране.
-      </p>
+      <p className="disclaimer-box">{t.common.disclaimer}</p>
     </div>
   );
 }

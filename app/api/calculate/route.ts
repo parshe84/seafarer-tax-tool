@@ -1,16 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { CalculatorInput, CalculatorResult } from "@/app/lib/types";
+import { getMessages } from "@/app/lib/i18n";
 
-// TODO: Заменить всё содержимое этого файла на реальную базу налоговых правил
-// по странам (Philippines / Ukraine / India / Indonesia / Croatia / Poland / ...).
-// Реальная логика должна учитывать:
-//   - гражданство и страну налогового резидентства (могут отличаться);
-//   - количество дней в море за отчётный период (пороги для льгот отличаются
-//     по странам, например OFW exemption на Филиппинах, seafarer's earnings
-//     deduction в UK и т.д.);
-//   - флаг судна и тип контракта (в некоторых странах влияет на применимость льгот);
-//   - актуальные сроки подачи документов и формы, которые меняются год от года.
-// Пока что ниже — фиксированная тестовая заглушка для проверки UI/UX и потока данных.
+const t = getMessages();
+
+// TODO: Replace the whole body of this file with a real per-country tax rule
+// base (Philippines / Ukraine / India / Indonesia / Croatia / Poland / ...).
+// The real logic should take into account:
+//   - citizenship vs. country of tax residence (these can differ);
+//   - number of days at sea in the reporting period (thresholds for benefits
+//     vary by country, e.g. the OFW exemption in the Philippines, the UK's
+//     seafarer's earnings deduction, etc.);
+//   - vessel flag and contract type (affects eligibility in some countries);
+//   - current filing deadlines and forms, which change year to year.
+// TODO (i18n): once real rule content exists, the checklist/disclaimer text
+// below will need to be localized per country/locale together with that
+// content — that is a separate concern from the generic UI strings in
+// messages/*.json, which this stub already reads for its own error text.
+// For now this returns a fixed test stub to validate the UI/UX and data flow.
 
 export async function POST(request: NextRequest) {
   let body: CalculatorInput;
@@ -19,7 +26,7 @@ export async function POST(request: NextRequest) {
     body = await request.json();
   } catch {
     return NextResponse.json(
-      { error: "Некорректный формат запроса." },
+      { error: t.api.invalidRequest },
       { status: 400 }
     );
   }
@@ -34,34 +41,34 @@ export async function POST(request: NextRequest) {
     body.daysAtSea > 366
   ) {
     return NextResponse.json(
-      { error: "Проверьте введённые данные и попробуйте снова." },
+      { error: t.api.validationError },
       { status: 400 }
     );
   }
 
-  // TODO: здесь должна быть реальная логика подбора чеклиста и суммы экономии
-  // на основе body.citizenship, body.taxResidenceCountry, body.daysAtSea, body.vesselFlag.
+  // TODO: real logic to pick the checklist and savings estimate belongs here,
+  // based on body.citizenship, body.taxResidenceCountry, body.daysAtSea, body.vesselFlag.
   const result: CalculatorResult = {
     checklist: [
       {
-        title: "Подать форму X до 30 апреля",
+        title: "File Form X by April 30",
         description:
-          "Заглушка: здесь появится конкретная форма для вашей страны налогового резидентства.",
+          "Stub: the specific form for your country of tax residence will appear here.",
       },
       {
-        title: "Собрать документ Z (подтверждение дней в море)",
+        title: "Collect Document Z (proof of days at sea)",
         description:
-          "Заглушка: список необходимых судовых документов будет зависеть от вашей страны и флага судна.",
+          "Stub: the list of required vessel documents will depend on your country and vessel flag.",
       },
       {
-        title: "Подать заявление на льготу в налоговую службу",
+        title: "Submit the benefit claim to the tax authority",
         description:
-          "Заглушка: точная процедура и орган подачи будут определены реальной базой правил.",
+          "Stub: the exact procedure and filing authority will be determined by the real rule base.",
       },
     ],
     estimatedSavingsUsd: 1250,
     disclaimer:
-      "Это тестовая оценка на основе заглушки, а не реальный расчёт. Итоговые суммы появятся после подключения базы налоговых правил по странам.",
+      "This is a test estimate from a stub, not a real calculation. Final amounts will appear once the per-country tax rule base is connected.",
   };
 
   return NextResponse.json(result);

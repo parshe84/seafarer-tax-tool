@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "title": "Seafarer Tax Optimizer",
+    "description": "Find out which seafarer tax benefits you qualify for, and how much money you could save."
+  },
+  "common": {
+    "disclaimer": "This tool provides an estimate only and is not tax advice. Please check current requirements with a tax advisor in your country."
+  },
+  "home": {
+    "heroTitle": "Seafarer Tax Optimizer",
+    "heroSubtitle": "Find out which tax benefits you qualify for, and how much money you could get back or save.",
+    "citizenshipLabel": "Citizenship",
+    "taxResidenceLabel": "Country of tax residence",
+    "daysAtSeaLabel": "Days at sea in the last 12 months",
+    "daysAtSeaPlaceholder": "e.g. 240",
+    "vesselFlagLabel": "Vessel flag",
+    "vesselFlagOptionalNote": "(optional)",
+    "vesselFlagPlaceholder": "e.g. Panama",
+    "vesselFlagHint": "Sometimes affects which benefits apply in your country.",
+    "submitButton": "Calculate my benefits",
+    "submitButtonLoading": "Calculating…",
+    "validationError": "Please enter a valid number of days at sea (0–366).",
+    "genericError": "Something went wrong. Please try again."
+  },
+  "results": {
+    "notFoundMessage": "No result found. Please fill out the form again.",
+    "loadingMessage": "Loading your result…",
+    "restartButton": "Start over",
+    "pageTitle": "Your result",
+    "savingsLabel": "Estimated savings",
+    "checklistTitle": "Action checklist"
+  },
+  "api": {
+    "invalidRequest": "Invalid request format.",
+    "validationError": "Please check your input and try again."
+  }
+}
