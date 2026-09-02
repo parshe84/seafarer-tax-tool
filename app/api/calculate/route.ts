@@ -3,15 +3,17 @@ import type {
   CalculatorInput,
   CalculatorResult,
   ChecklistItem,
+  FamilyLocation,
 } from "@/app/lib/types";
+import { FAMILY_LOCATIONS } from "@/app/lib/types";
 import { getMessages } from "@/app/lib/i18n";
 
 const t = getMessages();
 
 // TODO: Replace the stub branch below (buildStubResult) with real per-country
-// tax rule bases for the remaining countries (Ukraine / India / Indonesia /
-// Croatia / Poland / ...), one at a time. Philippines is implemented below
-// as the first real example.
+// tax rule bases for the remaining countries (India / Indonesia / Croatia /
+// Poland / ...), one at a time. Philippines and Ukraine are implemented
+// below as real examples.
 // TODO (i18n): once real rule content exists for a country, its
 // checklist/disclaimer text will need to be localized per locale together
 // with that content — a separate concern from the generic UI strings in
@@ -37,16 +39,32 @@ export async function POST(request: NextRequest) {
     (body.annualIncomeUsd !== undefined &&
       (typeof body.annualIncomeUsd !== "number" ||
         Number.isNaN(body.annualIncomeUsd) ||
-        body.annualIncomeUsd < 0))
+        body.annualIncomeUsd < 0)) ||
+    (body.daysInUkraine !== undefined &&
+      (typeof body.daysInUkraine !== "number" ||
+        Number.isNaN(body.daysInUkraine) ||
+        body.daysInUkraine < 0 ||
+        body.daysInUkraine > 366)) ||
+    (body.familyLocation !== undefined &&
+      !FAMILY_LOCATIONS.includes(body.familyLocation as FamilyLocation))
   ) {
     return NextResponse.json({ error: t.api.validationError }, { status: 400 });
   }
 
-  const result: CalculatorResult =
+  let result: CalculatorResult;
+  if (
     body.citizenship === "Philippines" &&
     body.taxResidenceCountry === "Philippines"
-      ? calculatePhilippinesResult(body)
-      : buildStubResult();
+  ) {
+    result = calculatePhilippinesResult(body);
+  } else if (
+    body.citizenship === "Ukraine" &&
+    body.taxResidenceCountry === "Ukraine"
+  ) {
+    result = calculateUkraineResult(body);
+  } else {
+    result = buildStubResult();
+  }
 
   return NextResponse.json(result);
 }
@@ -161,6 +179,179 @@ function calculatePhilippinesResult(input: CalculatorInput): CalculatorResult {
     estimatedSavingsUsd,
     estimatedSavingsNote,
     disclaimer: PHILIPPINES_DISCLAIMER,
+  };
+}
+
+// --- Ukraine --------------------------------------------------------------
+//
+// Source: Tax Code of Ukraine, individual tax residency test.
+//
+// Unlike the Philippines, Ukraine has NO automatic exemption for seafaring
+// income. Everything hinges on tax residency status, which is determined by
+// facts (center of vital interests, physical presence), not by registration.
+// We only classify a *likely* status here from two self-reported facts —
+// where the seafarer's immediate family / permanent home currently is, and
+// how many days they physically spent in Ukraine over the last 12 months —
+// and we are explicit whenever the classification is not confident enough
+// to act on.
+//
+// IMPORTANT: when the likely status is "resident", the income figure below
+// is a potential tax LIABILITY, not a saving — the UI must present it as
+// "estimated tax exposure", never as "savings".
+
+// 18% personal income tax (PDFO) + 1.5% military levy on worldwide income
+// for tax residents. Ukraine's flat rate needs no local-currency bracket
+// conversion, so this is applied directly to the self-reported USD income.
+const UKRAINE_RESIDENT_TAX_RATE = 0.18 + 0.015;
+
+const UKRAINE_DISCLAIMER =
+  "Residency status under the Tax Code of Ukraine is determined by facts " +
+  "and reviewed individually, not by this tool. The final determination " +
+  "rests with the State Tax Service of Ukraine (DPS). This is general " +
+  "information, not tax advice — confirm your specific situation with a " +
+  "qualified Ukrainian tax consultant before relying on this estimate.";
+
+function calculateUkraineResult(input: CalculatorInput): CalculatorResult {
+  const { familyLocation, daysInUkraine } = input;
+
+  if (familyLocation === "Ukraine") {
+    return ukraineLikelyResidentResult(input);
+  }
+
+  if (familyLocation === "Outside Ukraine") {
+    if (typeof daysInUkraine !== "number") {
+      return ukraineUnclearResult(
+        "Your residency status needs individual review — we don't have enough information about your time in Ukraine to classify it."
+      );
+    }
+    if (daysInUkraine < 183) {
+      return ukraineLikelyNonResidentResult(input);
+    }
+    return ukraineUnclearResult(
+      "Your residency status is ambiguous: your family/home is outside Ukraine, but you spent 183 days or more in Ukraine, which can itself trigger residency under the 183-day test. Your residency status needs individual review."
+    );
+  }
+
+  // familyLocation is "Not sure" or not provided at all — do not guess.
+  return ukraineUnclearResult(
+    "Your residency status needs individual review — we don't have enough information to classify it."
+  );
+}
+
+function ukraineLikelyResidentResult(
+  input: CalculatorInput
+): CalculatorResult {
+  const checklist: ChecklistItem[] = [
+    {
+      title: "Confirm your residency status officially if in doubt",
+      description:
+        "If you're unsure this classification is right, you can request an individual tax consultation or ruling from the State Tax Service (DPS) to confirm your status.",
+    },
+    {
+      title: "File a foreign income declaration by May 1",
+      description:
+        "Ukrainian tax residents must declare worldwide income, including seafaring salary earned abroad, in their annual tax return.",
+    },
+    {
+      title: "Pay the resulting tax liability by August 1",
+      description:
+        "The 18% personal income tax (PDFO) plus 1.5% military levy is due by this date for the prior reporting year.",
+    },
+    {
+      title: "Request proof of foreign tax paid from your employer/agent, if applicable",
+      description:
+        "A credit against Ukrainian tax is only possible with a legalized certificate from the foreign tax authority, authenticated through a Ukrainian consulate. Flag states typically withhold nothing, so this credit is rarely available in practice — do not assume it will offset your liability.",
+    },
+  ];
+
+  let estimatedSavingsUsd: number | null = null;
+  let estimatedSavingsNote: string;
+
+  if (input.annualIncomeUsd && input.annualIncomeUsd > 0) {
+    estimatedSavingsUsd = Math.round(
+      input.annualIncomeUsd * UKRAINE_RESIDENT_TAX_RATE
+    );
+    estimatedSavingsNote =
+      "This reflects the tax you may owe unless your non-resident status is confirmed — it is not a saving.";
+  } else {
+    estimatedSavingsNote =
+      "Estimated tax exposure requires your annual income. If your resident status is confirmed, tax applies at 19.5% (18% PDFO + 1.5% military levy) on worldwide income.";
+  }
+
+  return {
+    checklist,
+    estimatedSavingsUsd,
+    estimatedSavingsNote,
+    estimatedAmountLabel: "Estimated tax exposure",
+    estimatedAmountKind: "exposure",
+    disclaimer: UKRAINE_DISCLAIMER,
+  };
+}
+
+function ukraineLikelyNonResidentResult(
+  input: CalculatorInput
+): CalculatorResult {
+  const checklist: ChecklistItem[] = [
+    {
+      title: "Be ready to substantiate the facts if the tax authority asks",
+      description:
+        "Keep evidence of where your family/permanent home is and how many days you spent in Ukraine — the DPS can request these at any time.",
+    },
+    {
+      title: "Keep your passport stamps / seaman's book as proof of days outside Ukraine",
+      description:
+        "This is your primary evidence for the physical presence side of the residency test.",
+    },
+    {
+      title: "Get a written residency ruling from the tax authority if uncertainty persists long-term",
+      description:
+        "For an ongoing or high-value situation, a formal written request to the DPS removes the ambiguity instead of relying on a self-assessment.",
+    },
+  ];
+
+  let estimatedSavingsUsd: number | null = null;
+  let estimatedSavingsNote: string | undefined;
+
+  if (input.annualIncomeUsd && input.annualIncomeUsd > 0) {
+    estimatedSavingsUsd = Math.round(
+      input.annualIncomeUsd * UKRAINE_RESIDENT_TAX_RATE
+    );
+  } else {
+    estimatedSavingsNote =
+      "Exact savings estimate requires your annual income.";
+  }
+
+  return {
+    checklist,
+    estimatedSavingsUsd,
+    estimatedSavingsNote,
+    estimatedAmountLabel: "Estimated savings",
+    estimatedAmountKind: "savings",
+    disclaimer: UKRAINE_DISCLAIMER,
+  };
+}
+
+function ukraineUnclearResult(note: string): CalculatorResult {
+  const checklist: ChecklistItem[] = [
+    {
+      title: "Get an individual residency assessment before filing",
+      description:
+        "Contact the State Tax Service (DPS) or a qualified Ukrainian tax consultant with your specific facts — family location, days in Ukraine, and any other ties — before assuming either resident or non-resident treatment.",
+    },
+    {
+      title: "Keep records of your family's location and your travel dates",
+      description:
+        "Whichever status ultimately applies, you'll need evidence of where your family/home is and dated proof (passport stamps, seaman's book) of your time in and out of Ukraine.",
+    },
+  ];
+
+  return {
+    checklist,
+    estimatedSavingsUsd: null,
+    estimatedSavingsNote: note,
+    estimatedAmountLabel: "Residency status",
+    estimatedAmountKind: "unclear",
+    disclaimer: UKRAINE_DISCLAIMER,
   };
 }
 

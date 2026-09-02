@@ -62,13 +62,16 @@ export default function ResultsPage() {
         <h1>{t.results.pageTitle}</h1>
       </header>
 
-      <div className="savings-card">
-        <div className="label">{t.results.savingsLabel}</div>
-        {result.estimatedSavingsUsd !== null ? (
+      <div className={`savings-card ${result.estimatedAmountKind ?? "savings"}`}>
+        <div className="label">
+          {result.estimatedAmountLabel ?? t.results.savingsLabel}
+        </div>
+        {result.estimatedSavingsUsd !== null && (
           <div className="amount">
             ${result.estimatedSavingsUsd.toLocaleString("en-US")}
           </div>
-        ) : (
+        )}
+        {result.estimatedSavingsNote && (
           <div className="amount-note">{result.estimatedSavingsNote}</div>
         )}
       </div>

@@ -2,7 +2,12 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { COUNTRIES, type CalculatorInput } from "@/app/lib/types";
+import {
+  COUNTRIES,
+  FAMILY_LOCATIONS,
+  type CalculatorInput,
+  type FamilyLocation,
+} from "@/app/lib/types";
 import { getMessages } from "@/app/lib/i18n";
 
 const RESULT_STORAGE_KEY = "seafarer-tax-result";
@@ -17,8 +22,13 @@ export default function HomePage() {
   const [daysAtSea, setDaysAtSea] = useState<string>("");
   const [vesselFlag, setVesselFlag] = useState<string>("");
   const [annualIncomeUsd, setAnnualIncomeUsd] = useState<string>("");
+  const [familyLocation, setFamilyLocation] = useState<string>("");
+  const [daysInUkraine, setDaysInUkraine] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const showUkraineResidencyFields =
+    citizenship === "Ukraine" && taxResidenceCountry === "Ukraine";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,6 +50,16 @@ export default function HomePage() {
       parsedAnnualIncomeUsd = income;
     }
 
+    let parsedDaysInUkraine: number | undefined;
+    if (showUkraineResidencyFields && daysInUkraine.trim()) {
+      const value = Number(daysInUkraine);
+      if (Number.isNaN(value) || value < 0 || value > 366) {
+        setError(t.home.ukraineDaysInUkraineValidationError);
+        return;
+      }
+      parsedDaysInUkraine = value;
+    }
+
     const payload: CalculatorInput = {
       citizenship: citizenship as CalculatorInput["citizenship"],
       taxResidenceCountry:
@@ -47,6 +67,12 @@ export default function HomePage() {
       daysAtSea: days,
       vesselFlag: vesselFlag.trim() || undefined,
       annualIncomeUsd: parsedAnnualIncomeUsd,
+      familyLocation: showUkraineResidencyFields
+        ? (familyLocation as FamilyLocation) || undefined
+        : undefined,
+      daysInUkraine: showUkraineResidencyFields
+        ? parsedDaysInUkraine
+        : undefined,
     };
 
     setIsSubmitting(true);
@@ -162,6 +188,48 @@ export default function HomePage() {
             />
             <div className="hint">{t.home.annualIncomeHint}</div>
           </div>
+
+          {showUkraineResidencyFields && (
+            <>
+              <div className="field">
+                <label htmlFor="familyLocation">
+                  {t.home.ukraineFamilyLocationLabel}
+                </label>
+                <select
+                  id="familyLocation"
+                  value={familyLocation}
+                  onChange={(e) => setFamilyLocation(e.target.value)}
+                >
+                  <option value="">—</option>
+                  {FAMILY_LOCATIONS.map((location) => (
+                    <option key={location} value={location}>
+                      {location === "Ukraine"
+                        ? t.home.ukraineFamilyLocationOptionUkraine
+                        : location === "Outside Ukraine"
+                        ? t.home.ukraineFamilyLocationOptionOutside
+                        : t.home.ukraineFamilyLocationOptionNotSure}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="field">
+                <label htmlFor="daysInUkraine">
+                  {t.home.ukraineDaysInUkraineLabel}
+                </label>
+                <input
+                  id="daysInUkraine"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={366}
+                  placeholder={t.home.ukraineDaysInUkrainePlaceholder}
+                  value={daysInUkraine}
+                  onChange={(e) => setDaysInUkraine(e.target.value)}
+                />
+              </div>
+            </>
+          )}
 
           <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
             {isSubmitting ? t.home.submitButtonLoading : t.home.submitButton}

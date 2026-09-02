@@ -164,6 +164,14 @@ select:focus {
   margin-bottom: 20px;
 }
 
+.savings-card.exposure {
+  background: linear-gradient(135deg, #b23a1f, #8f2110);
+}
+
+.savings-card.unclear {
+  background: linear-gradient(135deg, #5b6779, #414c5c);
+}
+
 .savings-card .amount {
   font-size: 2.4rem;
   font-weight: 800;
