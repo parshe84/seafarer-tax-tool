@@ -1,0 +1,247 @@
+:root {
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-text: #1a2331;
+  --color-muted: #5b6779;
+  --color-primary: #0a5c8c;
+  --color-primary-dark: #084a70;
+  --color-accent: #1fa37a;
+  --color-border: #dde3ea;
+  --radius: 12px;
+  --max-width: 560px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 48px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+}
+
+header.hero {
+  width: 100%;
+  max-width: var(--max-width);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+header.hero h1 {
+  font-size: 1.6rem;
+  margin: 0 0 8px;
+}
+
+header.hero p {
+  color: var(--color-muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-text);
+}
+
+.field .hint {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-top: 4px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(10, 92, 140, 0.15);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-primary:disabled {
+  background: #9db3c2;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background: rgba(10, 92, 140, 0.06);
+}
+
+.error-box {
+  background: #fdecea;
+  border: 1px solid #f5c2bd;
+  color: #a3281c;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 18px;
+}
+
+.savings-card {
+  text-align: center;
+  padding: 28px 20px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--color-primary), #0a7ca8);
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.savings-card .amount {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin: 4px 0;
+}
+
+.savings-card .label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.savings-card .disclaimer {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  margin-top: 10px;
+}
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.checklist li {
+  display: flex;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.checklist li:last-child {
+  border-bottom: none;
+}
+
+.checklist .check-icon {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(31, 163, 122, 0.12);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.checklist .check-text .title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.checklist .check-text .desc {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-top: 2px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 24px 0 10px;
+}
+
+.footer-actions {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.disclaimer-box {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-top: 20px;
+  text-align: center;
+  line-height: 1.4;
+}
