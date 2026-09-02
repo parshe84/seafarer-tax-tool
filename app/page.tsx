@@ -16,6 +16,7 @@ export default function HomePage() {
   );
   const [daysAtSea, setDaysAtSea] = useState<string>("");
   const [vesselFlag, setVesselFlag] = useState<string>("");
+  const [annualIncomeUsd, setAnnualIncomeUsd] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,12 +30,23 @@ export default function HomePage() {
       return;
     }
 
+    let parsedAnnualIncomeUsd: number | undefined;
+    if (annualIncomeUsd.trim()) {
+      const income = Number(annualIncomeUsd);
+      if (Number.isNaN(income) || income < 0) {
+        setError(t.home.validationError);
+        return;
+      }
+      parsedAnnualIncomeUsd = income;
+    }
+
     const payload: CalculatorInput = {
       citizenship: citizenship as CalculatorInput["citizenship"],
       taxResidenceCountry:
         taxResidenceCountry as CalculatorInput["taxResidenceCountry"],
       daysAtSea: days,
       vesselFlag: vesselFlag.trim() || undefined,
+      annualIncomeUsd: parsedAnnualIncomeUsd,
     };
 
     setIsSubmitting(true);
@@ -130,6 +142,25 @@ export default function HomePage() {
               onChange={(e) => setVesselFlag(e.target.value)}
             />
             <div className="hint">{t.home.vesselFlagHint}</div>
+          </div>
+
+          <div className="field">
+            <label htmlFor="annualIncomeUsd">
+              {t.home.annualIncomeLabel}{" "}
+              <span style={{ fontWeight: 400 }}>
+                {t.home.annualIncomeOptionalNote}
+              </span>
+            </label>
+            <input
+              id="annualIncomeUsd"
+              type="number"
+              inputMode="numeric"
+              min={0}
+              placeholder={t.home.annualIncomePlaceholder}
+              value={annualIncomeUsd}
+              onChange={(e) => setAnnualIncomeUsd(e.target.value)}
+            />
+            <div className="hint">{t.home.annualIncomeHint}</div>
           </div>
 
           <button type="submit" className="btn btn-primary" disabled={isSubmitting}>

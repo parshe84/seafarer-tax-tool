@@ -17,6 +17,10 @@
     "vesselFlagOptionalNote": "(optional)",
     "vesselFlagPlaceholder": "e.g. Panama",
     "vesselFlagHint": "Sometimes affects which benefits apply in your country.",
+    "annualIncomeLabel": "Estimated annual income (USD)",
+    "annualIncomeOptionalNote": "(optional)",
+    "annualIncomePlaceholder": "e.g. 20000",
+    "annualIncomeHint": "Only used to estimate a dollar savings figure where possible. Leave blank if unsure.",
     "submitButton": "Calculate my benefits",
     "submitButtonLoading": "Calculating…",
     "validationError": "Please enter a valid number of days at sea (0–366).",
@@ -28,7 +32,8 @@
     "restartButton": "Start over",
     "pageTitle": "Your result",
     "savingsLabel": "Estimated savings",
-    "checklistTitle": "Action checklist"
+    "checklistTitle": "Action checklist",
+    "disclaimerTitle": "Not tax advice"
   },
   "api": {
     "invalidRequest": "Invalid request format.",

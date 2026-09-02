@@ -15,6 +15,8 @@ export interface CalculatorInput {
   taxResidenceCountry: Country;
   daysAtSea: number;
   vesselFlag?: string;
+  /** Optional, used only where the country's savings estimate needs it (e.g. Philippines). */
+  annualIncomeUsd?: number;
 }
 
 export interface ChecklistItem {
@@ -24,6 +26,9 @@ export interface ChecklistItem {
 
 export interface CalculatorResult {
   checklist: ChecklistItem[];
-  estimatedSavingsUsd: number;
+  /** Null when a real dollar estimate cannot be computed (e.g. no income given) — show estimatedSavingsNote instead. */
+  estimatedSavingsUsd: number | null;
+  /** Explanation to show in place of a dollar figure when estimatedSavingsUsd is null. */
+  estimatedSavingsNote?: string;
   disclaimer: string;
 }
