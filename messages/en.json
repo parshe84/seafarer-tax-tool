@@ -58,7 +58,19 @@
     "pageTitle": "Your result",
     "savingsLabel": "Estimated savings",
     "checklistTitle": "Action checklist",
-    "disclaimerTitle": "Not tax advice"
+    "disclaimerTitle": "Not tax advice",
+    "notifyTitle": "Get notified if tax rules change for your country",
+    "notifyTextGeneric": "Tax rules can change. Leave your email and we'll let you know if something changes for your country.",
+    "notifyTextUkraine": "Ukraine's seafarer registration rules are currently part of a pending legislative bill. Leave your email and we'll let you know if something changes.",
+    "notifyTextPoland": "Poland's zero-PIT reform for seafarers is pending Senate approval and, for some provisions, European Commission consent. Leave your email and we'll let you know if something changes.",
+    "notifyEmailLabel": "Email address",
+    "notifyEmailPlaceholder": "you@example.com",
+    "notifyButton": "Notify me",
+    "notifySubtext": "We'll only email you about tax rule changes for your country. No spam. One email, unsubscribe anytime by replying.",
+    "notifySuccessPrefix": "Thanks — we'll email you if anything changes for ",
+    "notifySuccessSuffix": ".",
+    "notifyValidationError": "Please enter a valid email address.",
+    "notifyErrorMessage": "Something went wrong, please try again."
   },
   "api": {
     "invalidRequest": "Invalid request format.",

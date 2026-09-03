@@ -14,6 +14,7 @@ import { getMessages } from "@/app/lib/i18n";
 import DaysInput from "@/app/components/DaysInput";
 
 const RESULT_STORAGE_KEY = "seafarer-tax-result";
+const RESULT_CONTEXT_STORAGE_KEY = "seafarer-tax-result-context";
 const t = getMessages();
 
 function yesNoNotSureLabel(value: YesNoNotSure): string {
@@ -111,6 +112,13 @@ export default function HomePage() {
 
       const result = await response.json();
       sessionStorage.setItem(RESULT_STORAGE_KEY, JSON.stringify(result));
+      sessionStorage.setItem(
+        RESULT_CONTEXT_STORAGE_KEY,
+        JSON.stringify({
+          citizenship: payload.citizenship,
+          taxResidenceCountry: payload.taxResidenceCountry,
+        })
+      );
       router.push("/results");
     } catch (err) {
       setError(err instanceof Error ? err.message : t.home.genericError);
