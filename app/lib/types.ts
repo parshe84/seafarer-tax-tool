@@ -15,6 +15,10 @@ export type Country = (typeof COUNTRIES)[number];
 export const FAMILY_LOCATIONS = ["Ukraine", "Outside Ukraine", "Not sure"] as const;
 export type FamilyLocation = (typeof FAMILY_LOCATIONS)[number];
 
+// Used for the Poland exemption test's two yes/no/unsure eligibility questions.
+export const YES_NO_NOT_SURE = ["Yes", "No", "Not sure"] as const;
+export type YesNoNotSure = (typeof YES_NO_NOT_SURE)[number];
+
 export interface CalculatorInput {
   citizenship: Country;
   taxResidenceCountry: Country;
@@ -26,6 +30,10 @@ export interface CalculatorInput {
   familyLocation?: FamilyLocation;
   /** Ukraine residency test only: physical days spent in Ukraine over the last 12 months. */
   daysInUkraine?: number;
+  /** Poland exemption test only: vessel in international sea transport of cargo/passengers >=50% of working time. */
+  vesselInternationalTransport?: YesNoNotSure;
+  /** Poland exemption test only: shipowner's actual management/head office is in a country with a DTT with Poland. */
+  shipownerInDttCountry?: YesNoNotSure;
 }
 
 export interface ChecklistItem {

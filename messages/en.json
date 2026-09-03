@@ -4,7 +4,10 @@
     "description": "Find out which seafarer tax benefits you qualify for, and how much money you could save."
   },
   "common": {
-    "disclaimer": "This tool provides an estimate only and is not tax advice. Please check current requirements with a tax advisor in your country."
+    "disclaimer": "This tool provides an estimate only and is not tax advice. Please check current requirements with a tax advisor in your country.",
+    "yes": "Yes",
+    "no": "No",
+    "notSure": "Not sure"
   },
   "home": {
     "heroTitle": "Seafarer Tax Optimizer",
@@ -13,6 +16,7 @@
     "taxResidenceLabel": "Country of tax residence",
     "daysAtSeaLabel": "Days at sea in the last 12 months",
     "daysAtSeaPlaceholder": "e.g. 240",
+    "indiaDaysAtSeaHint": "For India's NRI seafarer test, this should reflect days outside India for overseas employment. Days covered by a CDC-endorsed voyage starting or ending at an Indian port don't count as days in India, even if the vessel entered Indian waters during that voyage.",
     "vesselFlagLabel": "Vessel flag",
     "vesselFlagOptionalNote": "(optional)",
     "vesselFlagPlaceholder": "e.g. Panama",
@@ -28,6 +32,19 @@
     "ukraineDaysInUkraineLabel": "How many days did you physically spend in Ukraine over the last 12 months?",
     "ukraineDaysInUkrainePlaceholder": "e.g. 60",
     "ukraineDaysInUkraineValidationError": "Please enter a valid number of days in Ukraine (0–366).",
+    "polandInternationalTransportLabel": "Is your vessel engaged in international transport of cargo/passengers by sea for at least 50% of your actual working time?",
+    "polandInternationalTransportHint": "This excludes tugboats and dredgers whose international transport activity is under 50% of working time.",
+    "polandDttLabel": "Is the shipowner's actual management/head office located in a country that has a double taxation treaty (DTT) with Poland?",
+    "polandDttHint": "Common non-DTT flag/management countries include Antigua and Barbuda, Argentina, Barbados, Liberia.",
+    "enterVoyageDatesToggle": "Enter voyage dates instead",
+    "useManualDaysToggle": "Enter total days instead",
+    "voyageLogAddButton": "+ Add voyage",
+    "voyageLogRemoveButton": "Remove",
+    "voyageLogEmbarkationLabel": "Embarkation date",
+    "voyageLogDisembarkationLabel": "Disembarkation date",
+    "voyageLogTotalDaysLabel": "Total days calculated",
+    "voyageLogInvalidRangeError": "Disembarkation date must be after embarkation date.",
+    "voyageLogExceeds366Warning": "Total days across all voyages exceeds 366 — please double-check your entries.",
     "submitButton": "Calculate my benefits",
     "submitButtonLoading": "Calculating…",
     "validationError": "Please enter a valid number of days at sea (0–366).",
@@ -37,6 +54,7 @@
     "notFoundMessage": "No result found. Please fill out the form again.",
     "loadingMessage": "Loading your result…",
     "restartButton": "Start over",
+    "printButton": "Save as PDF / Print",
     "pageTitle": "Your result",
     "savingsLabel": "Estimated savings",
     "checklistTitle": "Action checklist",

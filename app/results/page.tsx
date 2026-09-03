@@ -31,6 +31,10 @@ export default function ResultsPage() {
     router.push("/");
   }
 
+  function handlePrint() {
+    window.print();
+  }
+
   if (notFound) {
     return (
       <div className="container">
@@ -97,6 +101,9 @@ export default function ResultsPage() {
       </div>
 
       <div className="footer-actions">
+        <button className="btn btn-secondary" onClick={handlePrint}>
+          {t.results.printButton}
+        </button>
         <button className="btn btn-secondary" onClick={handleRestart}>
           {t.results.restartButton}
         </button>

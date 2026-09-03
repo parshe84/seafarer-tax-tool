@@ -5,13 +5,22 @@ import { useRouter } from "next/navigation";
 import {
   COUNTRIES,
   FAMILY_LOCATIONS,
+  YES_NO_NOT_SURE,
   type CalculatorInput,
   type FamilyLocation,
+  type YesNoNotSure,
 } from "@/app/lib/types";
 import { getMessages } from "@/app/lib/i18n";
+import DaysInput from "@/app/components/DaysInput";
 
 const RESULT_STORAGE_KEY = "seafarer-tax-result";
 const t = getMessages();
+
+function yesNoNotSureLabel(value: YesNoNotSure): string {
+  if (value === "Yes") return t.common.yes;
+  if (value === "No") return t.common.no;
+  return t.common.notSure;
+}
 
 export default function HomePage() {
   const router = useRouter();
@@ -24,11 +33,17 @@ export default function HomePage() {
   const [annualIncomeUsd, setAnnualIncomeUsd] = useState<string>("");
   const [familyLocation, setFamilyLocation] = useState<string>("");
   const [daysInUkraine, setDaysInUkraine] = useState<string>("");
+  const [vesselInternationalTransport, setVesselInternationalTransport] =
+    useState<string>("");
+  const [shipownerInDttCountry, setShipownerInDttCountry] =
+    useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const showUkraineResidencyFields =
     citizenship === "Ukraine" && taxResidenceCountry === "Ukraine";
+  const showPolandExemptionFields =
+    citizenship === "Poland" && taxResidenceCountry === "Poland";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -72,6 +87,12 @@ export default function HomePage() {
         : undefined,
       daysInUkraine: showUkraineResidencyFields
         ? parsedDaysInUkraine
+        : undefined,
+      vesselInternationalTransport: showPolandExemptionFields
+        ? (vesselInternationalTransport as YesNoNotSure) || undefined
+        : undefined,
+      shipownerInDttCountry: showPolandExemptionFields
+        ? (shipownerInDttCountry as YesNoNotSure) || undefined
         : undefined,
     };
 
@@ -138,20 +159,17 @@ export default function HomePage() {
             </select>
           </div>
 
-          <div className="field">
-            <label htmlFor="daysAtSea">{t.home.daysAtSeaLabel}</label>
-            <input
-              id="daysAtSea"
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={366}
-              placeholder={t.home.daysAtSeaPlaceholder}
-              value={daysAtSea}
-              onChange={(e) => setDaysAtSea(e.target.value)}
-              required
-            />
-          </div>
+          <DaysInput
+            id="daysAtSea"
+            label={t.home.daysAtSeaLabel}
+            value={daysAtSea}
+            onChange={setDaysAtSea}
+            placeholder={t.home.daysAtSeaPlaceholder}
+            hint={
+              citizenship === "India" ? t.home.indiaDaysAtSeaHint : undefined
+            }
+            required
+          />
 
           <div className="field">
             <label htmlFor="vesselFlag">
@@ -213,20 +231,58 @@ export default function HomePage() {
                 </select>
               </div>
 
+              <DaysInput
+                id="daysInUkraine"
+                label={t.home.ukraineDaysInUkraineLabel}
+                value={daysInUkraine}
+                onChange={setDaysInUkraine}
+                placeholder={t.home.ukraineDaysInUkrainePlaceholder}
+              />
+            </>
+          )}
+
+          {showPolandExemptionFields && (
+            <>
               <div className="field">
-                <label htmlFor="daysInUkraine">
-                  {t.home.ukraineDaysInUkraineLabel}
+                <label htmlFor="vesselInternationalTransport">
+                  {t.home.polandInternationalTransportLabel}
                 </label>
-                <input
-                  id="daysInUkraine"
-                  type="number"
-                  inputMode="numeric"
-                  min={0}
-                  max={366}
-                  placeholder={t.home.ukraineDaysInUkrainePlaceholder}
-                  value={daysInUkraine}
-                  onChange={(e) => setDaysInUkraine(e.target.value)}
-                />
+                <select
+                  id="vesselInternationalTransport"
+                  value={vesselInternationalTransport}
+                  onChange={(e) =>
+                    setVesselInternationalTransport(e.target.value)
+                  }
+                >
+                  <option value="">—</option>
+                  {YES_NO_NOT_SURE.map((option) => (
+                    <option key={option} value={option}>
+                      {yesNoNotSureLabel(option)}
+                    </option>
+                  ))}
+                </select>
+                <div className="hint">
+                  {t.home.polandInternationalTransportHint}
+                </div>
+              </div>
+
+              <div className="field">
+                <label htmlFor="shipownerInDttCountry">
+                  {t.home.polandDttLabel}
+                </label>
+                <select
+                  id="shipownerInDttCountry"
+                  value={shipownerInDttCountry}
+                  onChange={(e) => setShipownerInDttCountry(e.target.value)}
+                >
+                  <option value="">—</option>
+                  {YES_NO_NOT_SURE.map((option) => (
+                    <option key={option} value={option}>
+                      {yesNoNotSureLabel(option)}
+                    </option>
+                  ))}
+                </select>
+                <div className="hint">{t.home.polandDttHint}</div>
               </div>
             </>
           )}

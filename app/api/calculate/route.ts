@@ -4,15 +4,16 @@ import type {
   CalculatorResult,
   ChecklistItem,
   FamilyLocation,
+  YesNoNotSure,
 } from "@/app/lib/types";
-import { FAMILY_LOCATIONS } from "@/app/lib/types";
+import { FAMILY_LOCATIONS, YES_NO_NOT_SURE } from "@/app/lib/types";
 import { getMessages } from "@/app/lib/i18n";
 
 const t = getMessages();
 
 // TODO: Replace the stub branch below (buildStubResult) with real per-country
-// tax rule bases for the remaining countries (India / Indonesia / Croatia /
-// Poland / ...), one at a time. Philippines and Ukraine are implemented
+// tax rule bases for the remaining countries (Indonesia / Croatia / ...),
+// one at a time. Philippines, Ukraine, India and Poland are implemented
 // below as real examples.
 // TODO (i18n): once real rule content exists for a country, its
 // checklist/disclaimer text will need to be localized per locale together
@@ -46,7 +47,13 @@ export async function POST(request: NextRequest) {
         body.daysInUkraine < 0 ||
         body.daysInUkraine > 366)) ||
     (body.familyLocation !== undefined &&
-      !FAMILY_LOCATIONS.includes(body.familyLocation as FamilyLocation))
+      !FAMILY_LOCATIONS.includes(body.familyLocation as FamilyLocation)) ||
+    (body.vesselInternationalTransport !== undefined &&
+      !YES_NO_NOT_SURE.includes(
+        body.vesselInternationalTransport as YesNoNotSure
+      )) ||
+    (body.shipownerInDttCountry !== undefined &&
+      !YES_NO_NOT_SURE.includes(body.shipownerInDttCountry as YesNoNotSure))
   ) {
     return NextResponse.json({ error: t.api.validationError }, { status: 400 });
   }
@@ -62,6 +69,16 @@ export async function POST(request: NextRequest) {
     body.taxResidenceCountry === "Ukraine"
   ) {
     result = calculateUkraineResult(body);
+  } else if (
+    body.citizenship === "India" &&
+    body.taxResidenceCountry === "India"
+  ) {
+    result = calculateIndiaResult(body);
+  } else if (
+    body.citizenship === "Poland" &&
+    body.taxResidenceCountry === "Poland"
+  ) {
+    result = calculatePolandResult(body);
   } else {
     result = buildStubResult();
   }
@@ -352,6 +369,195 @@ function ukraineUnclearResult(note: string): CalculatorResult {
     estimatedAmountLabel: "Residency status",
     estimatedAmountKind: "unclear",
     disclaimer: UKRAINE_DISCLAIMER,
+  };
+}
+
+// --- India ------------------------------------------------------------
+//
+// Sources: CBDT Notification No. 70/2015, CBDT Circular 13/2017, the
+// Income-tax Act 1961 (in effect through FY2025-26), and the Income-tax Act
+// 2025 (effective FY2026-27).
+//
+// Indian seafarers have a DIFFERENT residency test from the ordinary
+// 182/60-day NRI test used for other Indian citizens: a seafarer is
+// non-resident (NRI) for tax purposes if they spend 184 days or more
+// OUTSIDE India for the purpose of employment on a foreign ship in a
+// financial year. Crucially, days covered by a CDC (Continuous Discharge
+// Certificate) -endorsed voyage that starts or ends at an Indian port are
+// entirely excluded from "days in India" — even if the vessel physically
+// entered Indian waters during that voyage. From FY2026-27, a formal
+// employment contract proving employment outside India is required; without
+// it, NRI status may not be recognized.
+//
+// If NRI status holds, only India-sourced income is taxable — the foreign
+// seafaring salary is not. We reuse the existing daysAtSea field as the
+// "days outside India for employment" figure (no separate field), per the
+// same seafarer-specific test.
+
+const INDIA_NRI_DAYS_THRESHOLD = 184;
+
+const INDIA_DISCLAIMER =
+  "This reflects the seafarer-specific NRI test under CBDT Notification " +
+  "No. 70/2015 and Circular 13/2017, based on the Income-tax Act 1961 (in " +
+  "effect through FY2025-26) and the incoming Income-tax Act 2025 " +
+  "(effective FY2026-27, with tightened requirements including a formal " +
+  "employment contract proving employment outside India). This is general " +
+  "information, not tax advice — confirm your specific residential status " +
+  "and applicable rules, especially the contract requirement, with a " +
+  "qualified Indian tax professional.";
+
+function calculateIndiaResult(input: CalculatorInput): CalculatorResult {
+  if (input.daysAtSea >= INDIA_NRI_DAYS_THRESHOLD) {
+    return {
+      checklist: [
+        {
+          title: "Keep a copy of your CDC covering all voyages",
+          description:
+            "Your Continuous Discharge Certificate (CDC) is your primary evidence of days outside India — days on a CDC-endorsed voyage starting or ending at an Indian port are excluded entirely from 'days in India', even if the vessel entered Indian waters during that voyage.",
+        },
+        {
+          title: "Make sure you have a formal employment contract proving employment outside India",
+          description:
+            "From FY2026-27 under the Income Tax Act 2025, a formal contract with your foreign employer/manning agency confirming employment outside India is required — without it, your NRI status may not be recognized.",
+        },
+        {
+          title: "Receive your salary into an NRE account",
+          description:
+            "Being paid into a Non-Resident External (NRE) account is commonly used as supporting evidence of NRI status, alongside your CDC.",
+        },
+        {
+          title: "Keep a month-by-month record of your voyage days",
+          description:
+            "Retain this in case the Income Tax Department requests a detailed breakdown of your time on board and ashore.",
+        },
+      ],
+      estimatedSavingsUsd: null,
+      estimatedSavingsNote:
+        "Your foreign seafaring income is not taxable in India as an NRI. An exact dollar savings figure depends on the income tax slab you would otherwise fall into — consult a tax professional for a precise number.",
+      estimatedAmountLabel: "Estimated savings",
+      estimatedAmountKind: "savings",
+      disclaimer: INDIA_DISCLAIMER,
+    };
+  }
+
+  return {
+    checklist: [
+      {
+        title: "Get your residential status formally reviewed",
+        description:
+          "With fewer than 184 days outside India for employment, you may not meet the seafarer NRI test. Have a tax professional review your specific facts before assuming either status.",
+      },
+      {
+        title: "Determine which tax regime applies (old vs. new)",
+        description:
+          "Indian income tax has two parallel regimes with different slabs and deductions — which one is more favorable depends on your full financial picture.",
+      },
+    ],
+    estimatedSavingsUsd: null,
+    estimatedSavingsNote:
+      "You may not qualify for NRI seafarer status — consult a tax professional to review your residential status and applicable tax regime.",
+    estimatedAmountLabel: "Residency status",
+    estimatedAmountKind: "unclear",
+    disclaimer: INDIA_DISCLAIMER,
+  };
+}
+
+// --- Poland -------------------------------------------------------------
+//
+// Source: Art. 21 ust. 1 pkt 23c of the Polish PIT Act (in force since 2020).
+//
+// The exemption requires BOTH:
+//   1. The vessel is engaged in international transport of cargo/passengers
+//      by sea for at least 50% of the seafarer's actual working time (this
+//      excludes tugboats/dredgers below that threshold).
+//   2. The shipowner's actual management/head office is in a country that
+//      has a double taxation treaty (DTT) with Poland.
+// If both hold, foreign seafaring income is fully exempt from Polish PIT
+// (exemption with progression — it can still affect the rate on other
+// taxable Polish income). If the shipowner isn't in a DTT country, this
+// exemption doesn't apply and a proportional deduction may be possible only
+// with proof of foreign tax actually paid — a complex case needing
+// individual review. If the vessel doesn't meet the international-transport
+// threshold, the exemption doesn't apply at all.
+
+const POLAND_DISCLAIMER =
+  "Poland's seafarer tax rules are currently under active legislative " +
+  "reform in 2026 — a new law extending PIT exemption (passed by the " +
+  "Sejm) is pending Senate approval and, for some provisions, European " +
+  "Commission consent. This calculator reflects the CURRENTLY confirmed " +
+  "law (Art. 21(1)(23c)). Rules may change — verify current status before " +
+  "filing.";
+
+function calculatePolandResult(input: CalculatorInput): CalculatorResult {
+  const { vesselInternationalTransport, shipownerInDttCountry } = input;
+
+  if (
+    vesselInternationalTransport === "Yes" &&
+    shipownerInDttCountry === "Yes"
+  ) {
+    return {
+      checklist: [
+        {
+          title: "Request a certificate from your shipowner/agency with the required data set",
+          description:
+            "There's no official form, but the certificate must include: your full name, PESEL (if any), address, employment periods with dates, vessel name and flag, income amount, and the shipowner's details including tax ID and legal form.",
+        },
+        {
+          title: "Remember this is \"exemption with progression\"",
+          description:
+            "Your foreign seafaring income is exempt from PIT itself, but it can still affect the tax rate applied to any other taxable income you have in Poland.",
+        },
+        {
+          title: "Keep your full documentation package",
+          description:
+            "Polish tax authorities in 2026 are actively auditing these declarations — an incomplete document package is a common reason those audits escalate.",
+        },
+      ],
+      estimatedSavingsUsd: null,
+      estimatedSavingsNote:
+        "This income is exempt from Polish PIT under Art. 21(1)(23c). An exact dollar savings figure depends on the Polish PIT scale that would otherwise apply — consult a tax professional for a precise number.",
+      estimatedAmountLabel: "Estimated savings",
+      estimatedAmountKind: "savings",
+      disclaimer: POLAND_DISCLAIMER,
+    };
+  }
+
+  if (vesselInternationalTransport === "No") {
+    return polandUnclearResult(
+      "Poland's PIT exemption under Art. 21(1)(23c) applies only to seafarers on vessels engaged in international transport of cargo/passengers by sea for at least 50% of actual working time. Based on your answer, your vessel does not meet this threshold, so the exemption does not apply. Your income may still be taxable in Poland depending on your overall situation — consult a tax professional."
+    );
+  }
+
+  if (shipownerInDttCountry === "No") {
+    return polandUnclearResult(
+      "The Art. 21(1)(23c) exemption doesn't apply because your shipowner's actual management isn't in a country with a double taxation treaty (DTT) with Poland. A proportional deduction may be possible instead, but only with proof that tax was actually paid abroad — this is a complex case that needs individual review by a tax professional."
+    );
+  }
+
+  return polandUnclearResult(
+    "We don't have enough information to determine whether the Art. 21(1)(23c) exemption applies. Please answer both eligibility questions, or consult a tax professional with your specific vessel and employer details."
+  );
+}
+
+function polandUnclearResult(note: string): CalculatorResult {
+  return {
+    checklist: [
+      {
+        title: "Get your eligibility reviewed by a tax professional",
+        description:
+          "Confirm whether your vessel meets the international-transport threshold and whether your shipowner's management is in a DTT country before assuming any tax treatment.",
+      },
+      {
+        title: "Keep records of your vessel's activity split and your employer's registered management location",
+        description:
+          "You'll need evidence of both facts regardless of which tax treatment ultimately applies.",
+      },
+    ],
+    estimatedSavingsUsd: null,
+    estimatedSavingsNote: note,
+    estimatedAmountLabel: "Tax treatment",
+    estimatedAmountKind: "unclear",
+    disclaimer: POLAND_DISCLAIMER,
   };
 }
 
