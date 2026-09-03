@@ -84,6 +84,10 @@ export default function ResultsPage() {
           email: notifyEmail.trim(),
           citizenship: context?.citizenship ?? "",
           taxResidencyCountry: context?.taxResidenceCountry ?? "",
+          // Formspree honeypot field: left empty by real users; bots that
+          // auto-fill every field trip it, and Formspree silently discards
+          // the submission instead of forwarding it as spam.
+          _gotcha: "",
         }),
       });
 
