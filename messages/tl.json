@@ -1,9 +1,79 @@
 {
   "meta": {
-    "title": "Calculator ng Buwis para sa Marino"
+    "title": "Calculator ng Buwis para sa Marino",
+    "description": "Alamin kung anong mga benepisyo sa buwis ang pwede mong ma-claim bilang marino, at magkano ang maaari mong maipon."
+  },
+  "common": {
+    "disclaimer": "Ang tool na ito ay nagbibigay lamang ng tantiya at hindi ito payo sa buwis. Mangyaring kumpirmahin ang kasalukuyang mga kinakailangan sa isang tax advisor sa iyong bansa.",
+    "yes": "Oo",
+    "no": "Hindi",
+    "notSure": "Hindi sigurado"
   },
   "home": {
     "heroTitle": "Calculator ng Buwis para sa Marino",
-    "submitButton": "Kalkulahin ang aking mga benepisyo"
+    "heroSubtitle": "Alamin kung anong mga benepisyo sa buwis ang karapat-dapat kang matanggap, at magkano ang maaari mong mabawi o maipon.",
+    "citizenshipLabel": "Nasyonalidad",
+    "taxResidenceLabel": "Bansa ng iyong tax residency",
+    "daysAtSeaLabel": "Bilang ng araw sa dagat sa nakaraang 12 buwan",
+    "daysAtSeaPlaceholder": "hal. 240",
+    "indiaDaysAtSeaHint": "Para sa NRI seafarer test ng India, dapat itong sumasalamin sa mga araw na wala ka sa India dahil sa trabaho sa ibang bansa. Ang mga araw na saklaw ng isang biyaheng may CDC endorsement na nagsimula o natapos sa isang Indian port ay hindi kasama sa 'mga araw sa India', kahit pumasok ang barko sa tubig ng India habang naglalayag.",
+    "vesselFlagLabel": "Flag ng barko",
+    "vesselFlagOptionalNote": "(opsyonal)",
+    "vesselFlagPlaceholder": "hal. Panama",
+    "vesselFlagHint": "Minsan ay nakakaapekto ito sa kung anong mga benepisyo ang applicable sa iyong bansa.",
+    "annualIncomeLabel": "Tinatayang taunang kita (USD)",
+    "annualIncomeOptionalNote": "(opsyonal)",
+    "annualIncomePlaceholder": "hal. 20000",
+    "annualIncomeHint": "Ginagamit lamang para tantiyahin ang halaga ng maiipon sa dolyar kung posible. Iwanang blangko kung hindi sigurado.",
+    "ukraineFamilyLocationLabel": "Saan kasalukuyang nakatira ang iyong agarang pamilya / permanenteng tahanan?",
+    "ukraineFamilyLocationOptionUkraine": "Ukraine",
+    "ukraineFamilyLocationOptionOutside": "Sa labas ng Ukraine",
+    "ukraineFamilyLocationOptionNotSure": "Hindi sigurado",
+    "ukraineDaysInUkraineLabel": "Ilang araw ka ba talaga nanatili sa Ukraine sa nakaraang 12 buwan?",
+    "ukraineDaysInUkrainePlaceholder": "hal. 60",
+    "ukraineDaysInUkraineValidationError": "Maglagay ng wastong bilang ng araw sa Ukraine (0–366).",
+    "polandInternationalTransportLabel": "Ang barko mo ba ay ginagamit para sa international na transport ng kargamento/pasahero sa dagat nang hindi bababa sa 50% ng iyong aktwal na oras ng trabaho?",
+    "polandInternationalTransportHint": "Hindi kasama rito ang mga tugboat at dredger na ang international transport activity ay mas mababa sa 50% ng oras ng trabaho.",
+    "polandDttLabel": "Ang aktwal na management/head office ba ng may-ari ng barko ay matatagpuan sa isang bansang may double taxation treaty (DTT) sa Poland?",
+    "polandDttHint": "Kabilang sa mga karaniwang bansa na walang DTT bilang flag/management country ang Antigua and Barbuda, Argentina, Barbados, Liberia.",
+    "enterVoyageDatesToggle": "Maglagay na lang ng mga petsa ng biyahe",
+    "useManualDaysToggle": "Maglagay na lang ng kabuuang bilang ng araw",
+    "voyageLogAddButton": "+ Magdagdag ng biyahe",
+    "voyageLogRemoveButton": "Alisin",
+    "voyageLogEmbarkationLabel": "Petsa ng pagsakay (embarkation)",
+    "voyageLogDisembarkationLabel": "Petsa ng pagbaba (disembarkation)",
+    "voyageLogTotalDaysLabel": "Kabuuang bilang ng araw na nakalkula",
+    "voyageLogInvalidRangeError": "Ang petsa ng pagbaba ay dapat pagkatapos ng petsa ng pagsakay.",
+    "voyageLogExceeds366Warning": "Lumagpas sa 366 ang kabuuang araw sa lahat ng biyahe — pakisuri muli ang mga entry mo.",
+    "submitButton": "Kalkulahin ang aking mga benepisyo",
+    "submitButtonLoading": "Kinakalkula…",
+    "validationError": "Maglagay ng wastong bilang ng araw sa dagat (0–366).",
+    "genericError": "May naganap na error. Pakisubukang muli."
+  },
+  "results": {
+    "notFoundMessage": "Walang nakitang resulta. Pakipunan muli ang form.",
+    "loadingMessage": "Kinukuha ang iyong resulta…",
+    "restartButton": "Magsimula ulit",
+    "printButton": "I-save bilang PDF / I-print",
+    "pageTitle": "Ang iyong resulta",
+    "savingsLabel": "Tinatayang maiipon",
+    "checklistTitle": "Checklist ng mga gagawin",
+    "disclaimerTitle": "Hindi ito payo sa buwis",
+    "notifyTitle": "Ipaalam sa akin kung may magbabago sa batas ng buwis para sa aking bansa",
+    "notifyTextGeneric": "Maaaring magbago ang mga batas sa buwis. Iwan ang iyong email at ipapaalam namin sa iyo kung may magbabago para sa iyong bansa.",
+    "notifyTextUkraine": "Ang mga panuntunan sa pagpaparehistro ng marino sa Ukraine ay kasalukuyang bahagi ng isang panukalang batas na naghihintay ng aksyon. Iwan ang iyong email at ipapaalam namin sa iyo kung may magbabago.",
+    "notifyTextPoland": "Ang zero-PIT reform ng Poland para sa mga marino ay naghihintay pa ng approval ng Senate at, para sa ilang probisyon, ng pahintulot ng European Commission. Iwan ang iyong email at ipapaalam namin sa iyo kung may magbabago.",
+    "notifyEmailLabel": "Email address",
+    "notifyEmailPlaceholder": "ikaw@example.com",
+    "notifyButton": "Ipaalam sa akin",
+    "notifySubtext": "Ie-email ka lang namin tungkol sa mga pagbabago sa batas ng buwis para sa iyong bansa. Walang spam. Isang email lang, pwede kang mag-unsubscribe anumang oras sa pamamagitan ng pag-reply.",
+    "notifySuccessPrefix": "Salamat — ie-email ka namin kung may magbabago para sa ",
+    "notifySuccessSuffix": ".",
+    "notifyValidationError": "Maglagay ng wastong email address.",
+    "notifyErrorMessage": "May naganap na error, pakisubukang muli."
+  },
+  "api": {
+    "invalidRequest": "Hindi wastong format ng request.",
+    "validationError": "Pakisuri ang iyong impormasyon at subukang muli."
   }
 }

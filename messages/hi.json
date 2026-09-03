@@ -1,9 +1,79 @@
 {
   "meta": {
-    "title": "नाविक कर अनुकूलक"
+    "title": "नाविक कर अनुकूलक",
+    "description": "जानें कि आप एक नाविक के तौर पर किन टैक्स लाभों के हकदार हैं, और आप कितना पैसा बचा सकते हैं।"
+  },
+  "common": {
+    "disclaimer": "यह टूल केवल एक अनुमान देता है और यह कर सलाह नहीं है। कृपया अपने देश में किसी टैक्स सलाहकार से मौजूदा नियम जांचें।",
+    "yes": "हां",
+    "no": "नहीं",
+    "notSure": "पक्का नहीं"
   },
   "home": {
     "heroTitle": "नाविक कर अनुकूलक",
-    "submitButton": "मेरे लाभ की गणना करें"
+    "heroSubtitle": "जानें कि आप किन टैक्स लाभों के हकदार हैं, और आप कितना पैसा वापस पा सकते हैं या बचा सकते हैं।",
+    "citizenshipLabel": "नागरिकता",
+    "taxResidenceLabel": "कर निवास (tax residence) का देश",
+    "daysAtSeaLabel": "पिछले 12 महीनों में समुद्र में बिताए दिनों की संख्या",
+    "daysAtSeaPlaceholder": "उदा. 240",
+    "indiaDaysAtSeaHint": "भारत के NRI seafarer टेस्ट के लिए, इसमें विदेश में नौकरी के कारण भारत के बाहर बिताए गए दिन शामिल होने चाहिए। किसी भारतीय बंदरगाह से शुरू या खत्म होने वाली CDC-endorsed यात्रा के दिन 'भारत में बिताए दिनों' में नहीं गिने जाते, भले ही जहाज उस यात्रा के दौरान भारतीय जलक्षेत्र में आया हो।",
+    "vesselFlagLabel": "जहाज़ का फ्लैग (ध्वज)",
+    "vesselFlagOptionalNote": "(वैकल्पिक)",
+    "vesselFlagPlaceholder": "उदा. Panama",
+    "vesselFlagHint": "यह कभी-कभी इस बात को प्रभावित करता है कि आपके देश में कौन से लाभ लागू होते हैं।",
+    "annualIncomeLabel": "अनुमानित वार्षिक आय (USD)",
+    "annualIncomeOptionalNote": "(वैकल्पिक)",
+    "annualIncomePlaceholder": "उदा. 20000",
+    "annualIncomeHint": "जहां संभव हो वहां डॉलर में बचत का अनुमान लगाने के लिए ही इस्तेमाल होता है। अगर पक्का नहीं है तो खाली छोड़ दें।",
+    "ukraineFamilyLocationLabel": "आपका करीबी परिवार / स्थायी घर अभी कहां है?",
+    "ukraineFamilyLocationOptionUkraine": "Ukraine",
+    "ukraineFamilyLocationOptionOutside": "Ukraine से बाहर",
+    "ukraineFamilyLocationOptionNotSure": "पक्का नहीं",
+    "ukraineDaysInUkraineLabel": "पिछले 12 महीनों में आप वास्तव में कितने दिन Ukraine में रहे?",
+    "ukraineDaysInUkrainePlaceholder": "उदा. 60",
+    "ukraineDaysInUkraineValidationError": "Ukraine में बिताए दिनों की सही संख्या दर्ज करें (0–366)।",
+    "polandInternationalTransportLabel": "क्या आपका जहाज़ आपके कुल कार्य समय के कम से कम 50% हिस्से में समुद्र के रास्ते माल/यात्रियों के अंतरराष्ट्रीय परिवहन में लगा है?",
+    "polandInternationalTransportHint": "इसमें टगबोट और ड्रेजर शामिल नहीं हैं जिनकी अंतरराष्ट्रीय परिवहन गतिविधि कार्य समय के 50% से कम है।",
+    "polandDttLabel": "क्या जहाज़ मालिक (shipowner) का वास्तविक प्रबंधन/मुख्यालय ऐसे देश में है जिसका Poland के साथ दोहरे कराधान से बचाव समझौता (DTT) है?",
+    "polandDttHint": "बिना DTT वाले सामान्य फ्लैग/प्रबंधन देशों में Antigua and Barbuda, Argentina, Barbados, Liberia शामिल हैं।",
+    "enterVoyageDatesToggle": "इसके बजाय यात्रा (voyage) की तारीखें दर्ज करें",
+    "useManualDaysToggle": "इसके बजाय कुल दिनों की संख्या दर्ज करें",
+    "voyageLogAddButton": "+ यात्रा जोड़ें",
+    "voyageLogRemoveButton": "हटाएं",
+    "voyageLogEmbarkationLabel": "जहाज़ पर चढ़ने की तारीख (embarkation)",
+    "voyageLogDisembarkationLabel": "जहाज़ से उतरने की तारीख (disembarkation)",
+    "voyageLogTotalDaysLabel": "कुल गणना किए गए दिन",
+    "voyageLogInvalidRangeError": "उतरने की तारीख चढ़ने की तारीख के बाद होनी चाहिए।",
+    "voyageLogExceeds366Warning": "सभी यात्राओं के कुल दिन 366 से अधिक हैं — कृपया अपनी एंट्री दोबारा जांचें।",
+    "submitButton": "मेरे लाभ की गणना करें",
+    "submitButtonLoading": "गणना हो रही है…",
+    "validationError": "समुद्र में बिताए दिनों की सही संख्या दर्ज करें (0–366)।",
+    "genericError": "कुछ गड़बड़ हो गई। कृपया फिर से कोशिश करें।"
+  },
+  "results": {
+    "notFoundMessage": "कोई परिणाम नहीं मिला। कृपया फॉर्म फिर से भरें।",
+    "loadingMessage": "आपका परिणाम लोड हो रहा है…",
+    "restartButton": "फिर से शुरू करें",
+    "printButton": "PDF के रूप में सेव करें / प्रिंट करें",
+    "pageTitle": "आपका परिणाम",
+    "savingsLabel": "अनुमानित बचत",
+    "checklistTitle": "करने योग्य कामों की सूची",
+    "disclaimerTitle": "यह कर सलाह नहीं है",
+    "notifyTitle": "अगर आपके देश के लिए टैक्स नियम बदलते हैं तो मुझे बताएं",
+    "notifyTextGeneric": "टैक्स नियम बदल सकते हैं। अपना ईमेल छोड़ें और अगर आपके देश के लिए कुछ बदलता है तो हम आपको बताएंगे।",
+    "notifyTextUkraine": "Ukraine में नाविकों के पंजीकरण के नियम फिलहाल एक लंबित विधेयक (bill) का हिस्सा हैं। अपना ईमेल छोड़ें और अगर कुछ बदलता है तो हम आपको बताएंगे।",
+    "notifyTextPoland": "नाविकों के लिए Poland के zero-PIT सुधार को अभी Senate की मंजूरी और, कुछ प्रावधानों के लिए, European Commission की सहमति का इंतज़ार है। अपना ईमेल छोड़ें और अगर कुछ बदलता है तो हम आपको बताएंगे।",
+    "notifyEmailLabel": "ईमेल पता",
+    "notifyEmailPlaceholder": "you@example.com",
+    "notifyButton": "मुझे बताएं",
+    "notifySubtext": "हम आपको केवल आपके देश के लिए टैक्स नियमों में बदलाव के बारे में ईमेल करेंगे। कोई स्पैम नहीं। सिर्फ एक ईमेल, कभी भी रिप्लाई करके अनसब्सक्राइब करें।",
+    "notifySuccessPrefix": "धन्यवाद — अगर ",
+    "notifySuccessSuffix": " के लिए कुछ बदलता है तो हम आपको ईमेल करेंगे।",
+    "notifyValidationError": "कृपया एक सही ईमेल पता दर्ज करें।",
+    "notifyErrorMessage": "कुछ गड़बड़ हो गई, कृपया फिर से कोशिश करें।"
+  },
+  "api": {
+    "invalidRequest": "अनुरोध (request) का फॉर्मेट सही नहीं है।",
+    "validationError": "कृपया अपनी जानकारी जांचें और फिर से कोशिश करें।"
   }
 }

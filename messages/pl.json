@@ -1,9 +1,79 @@
 {
   "meta": {
-    "title": "Optymalizator podatkowy dla marynarzy"
+    "title": "Optymalizator podatkowy dla marynarzy",
+    "description": "Dowiedz się, do jakich ulg podatkowych masz prawo jako marynarz i ile pieniędzy możesz zaoszczędzić."
+  },
+  "common": {
+    "disclaimer": "To narzędzie podaje jedynie orientacyjny szacunek i nie jest poradą podatkową. Sprawdź aktualne przepisy u doradcy podatkowego w swoim kraju.",
+    "yes": "Tak",
+    "no": "Nie",
+    "notSure": "Nie jestem pewien/pewna"
   },
   "home": {
     "heroTitle": "Optymalizator podatkowy dla marynarzy",
-    "submitButton": "Oblicz moje ulgi"
+    "heroSubtitle": "Dowiedz się, do jakich ulg podatkowych masz prawo i ile pieniędzy możesz odzyskać lub zaoszczędzić.",
+    "citizenshipLabel": "Obywatelstwo",
+    "taxResidenceLabel": "Kraj rezydencji podatkowej",
+    "daysAtSeaLabel": "Liczba dni na morzu w ciągu ostatnich 12 miesięcy",
+    "daysAtSeaPlaceholder": "np. 240",
+    "indiaDaysAtSeaHint": "Dla indyjskiego testu NRI dla marynarzy powinno to odzwierciedlać dni spędzone poza Indiami w związku z pracą za granicą. Dni objęte rejsem potwierdzonym przez CDC, który rozpoczyna się lub kończy w indyjskim porcie, nie liczą się jako dni w Indiach, nawet jeśli statek wpłynął na indyjskie wody podczas tego rejsu.",
+    "vesselFlagLabel": "Bandera statku",
+    "vesselFlagOptionalNote": "(opcjonalnie)",
+    "vesselFlagPlaceholder": "np. Panama",
+    "vesselFlagHint": "Czasami wpływa na to, jakie ulgi obowiązują w twoim kraju.",
+    "annualIncomeLabel": "Szacowany roczny dochód (USD)",
+    "annualIncomeOptionalNote": "(opcjonalnie)",
+    "annualIncomePlaceholder": "np. 20000",
+    "annualIncomeHint": "Używane tylko do oszacowania kwoty oszczędności w dolarach, jeśli to możliwe. Zostaw puste, jeśli nie jesteś pewien/pewna.",
+    "ukraineFamilyLocationLabel": "Gdzie obecnie mieszka twoja najbliższa rodzina / gdzie znajduje się twój stały dom?",
+    "ukraineFamilyLocationOptionUkraine": "Ukraina",
+    "ukraineFamilyLocationOptionOutside": "Poza Ukrainą",
+    "ukraineFamilyLocationOptionNotSure": "Nie jestem pewien/pewna",
+    "ukraineDaysInUkraineLabel": "Ile dni faktycznie spędziłeś/spędziłaś na Ukrainie w ciągu ostatnich 12 miesięcy?",
+    "ukraineDaysInUkrainePlaceholder": "np. 60",
+    "ukraineDaysInUkraineValidationError": "Podaj prawidłową liczbę dni na Ukrainie (0–366).",
+    "polandInternationalTransportLabel": "Czy twój statek zajmuje się międzynarodowym transportem morskim towarów/pasażerów przez co najmniej 50% twojego faktycznego czasu pracy?",
+    "polandInternationalTransportHint": "Nie dotyczy to holowników i pogłębiarek, których działalność w międzynarodowym transporcie stanowi mniej niż 50% czasu pracy.",
+    "polandDttLabel": "Czy faktyczny zarząd/siedziba główna armatora znajduje się w kraju, który ma umowę o unikaniu podwójnego opodatkowania (DTT) z Polską?",
+    "polandDttHint": "Do częstych krajów bandery/zarządu bez DTT należą Antigua and Barbuda, Argentyna, Barbados, Liberia.",
+    "enterVoyageDatesToggle": "Podaj zamiast tego daty rejsów",
+    "useManualDaysToggle": "Podaj zamiast tego łączną liczbę dni",
+    "voyageLogAddButton": "+ Dodaj rejs",
+    "voyageLogRemoveButton": "Usuń",
+    "voyageLogEmbarkationLabel": "Data zaokrętowania (embarkation)",
+    "voyageLogDisembarkationLabel": "Data zejścia ze statku (disembarkation)",
+    "voyageLogTotalDaysLabel": "Obliczona łączna liczba dni",
+    "voyageLogInvalidRangeError": "Data zejścia ze statku musi być późniejsza niż data zaokrętowania.",
+    "voyageLogExceeds366Warning": "Łączna liczba dni ze wszystkich rejsów przekracza 366 — sprawdź wprowadzone dane.",
+    "submitButton": "Oblicz moje ulgi",
+    "submitButtonLoading": "Obliczanie…",
+    "validationError": "Podaj prawidłową liczbę dni na morzu (0–366).",
+    "genericError": "Coś poszło nie tak. Spróbuj ponownie."
+  },
+  "results": {
+    "notFoundMessage": "Nie znaleziono wyniku. Wypełnij formularz ponownie.",
+    "loadingMessage": "Wczytywanie wyniku…",
+    "restartButton": "Zacznij od nowa",
+    "printButton": "Zapisz jako PDF / Drukuj",
+    "pageTitle": "Twój wynik",
+    "savingsLabel": "Szacowane oszczędności",
+    "checklistTitle": "Lista kontrolna działań",
+    "disclaimerTitle": "To nie jest porada podatkowa",
+    "notifyTitle": "Powiadom mnie, jeśli przepisy podatkowe zmienią się dla mojego kraju",
+    "notifyTextGeneric": "Przepisy podatkowe mogą się zmieniać. Zostaw swój email, a poinformujemy cię, jeśli coś się zmieni w twoim kraju.",
+    "notifyTextUkraine": "Zasady rejestracji marynarzy na Ukrainie są obecnie częścią projektu ustawy oczekującego na rozpatrzenie. Zostaw swój email, a poinformujemy cię, jeśli coś się zmieni.",
+    "notifyTextPoland": "Reforma zerowego PIT dla marynarzy w Polsce czeka na zatwierdzenie przez Senat, a w przypadku niektórych przepisów — także na zgodę Komisji Europejskiej. Zostaw swój email, a poinformujemy cię, jeśli coś się zmieni.",
+    "notifyEmailLabel": "Adres e-mail",
+    "notifyEmailPlaceholder": "ty@example.com",
+    "notifyButton": "Powiadom mnie",
+    "notifySubtext": "Będziemy wysyłać e-maile tylko o zmianach przepisów podatkowych dla twojego kraju. Bez spamu. Jeden e-mail, możesz zrezygnować w dowolnym momencie, po prostu odpowiadając na niego.",
+    "notifySuccessPrefix": "Dziękujemy — wyślemy ci e-mail, jeśli coś się zmieni dla ",
+    "notifySuccessSuffix": ".",
+    "notifyValidationError": "Podaj prawidłowy adres e-mail.",
+    "notifyErrorMessage": "Coś poszło nie tak, spróbuj ponownie."
+  },
+  "api": {
+    "invalidRequest": "Nieprawidłowy format zapytania.",
+    "validationError": "Sprawdź wprowadzone dane i spróbuj ponownie."
   }
 }
