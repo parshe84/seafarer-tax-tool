@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { defaultLocale, getMessages } from "@/app/lib/i18n";
+import { LocaleProvider } from "@/app/lib/LocaleContext";
+import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 import "./globals.css";
 
 const t = getMessages();
@@ -22,7 +24,12 @@ export default function RootLayout({
   return (
     <html lang={defaultLocale}>
       <body>
-        <div className="page">{children}</div>
+        <LocaleProvider>
+          <div className="site-header">
+            <LanguageSwitcher />
+          </div>
+          <div className="page">{children}</div>
+        </LocaleProvider>
       </body>
     </html>
   );

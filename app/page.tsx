@@ -10,14 +10,14 @@ import {
   type FamilyLocation,
   type YesNoNotSure,
 } from "@/app/lib/types";
-import { getMessages } from "@/app/lib/i18n";
+import { useLocale } from "@/app/lib/LocaleContext";
+import type { Messages } from "@/app/lib/i18n";
 import DaysInput from "@/app/components/DaysInput";
 
 const RESULT_STORAGE_KEY = "seafarer-tax-result";
 const RESULT_CONTEXT_STORAGE_KEY = "seafarer-tax-result-context";
-const t = getMessages();
 
-function yesNoNotSureLabel(value: YesNoNotSure): string {
+function yesNoNotSureLabel(value: YesNoNotSure, t: Messages): string {
   if (value === "Yes") return t.common.yes;
   if (value === "No") return t.common.no;
   return t.common.notSure;
@@ -25,6 +25,7 @@ function yesNoNotSureLabel(value: YesNoNotSure): string {
 
 export default function HomePage() {
   const router = useRouter();
+  const { locale, t } = useLocale();
   const [citizenship, setCitizenship] = useState<string>(COUNTRIES[0]);
   const [taxResidenceCountry, setTaxResidenceCountry] = useState<string>(
     COUNTRIES[0]
@@ -95,6 +96,7 @@ export default function HomePage() {
       shipownerInDttCountry: showPolandExemptionFields
         ? (shipownerInDttCountry as YesNoNotSure) || undefined
         : undefined,
+      locale,
     };
 
     setIsSubmitting(true);
@@ -265,7 +267,7 @@ export default function HomePage() {
                   <option value="">—</option>
                   {YES_NO_NOT_SURE.map((option) => (
                     <option key={option} value={option}>
-                      {yesNoNotSureLabel(option)}
+                      {yesNoNotSureLabel(option, t)}
                     </option>
                   ))}
                 </select>
@@ -286,7 +288,7 @@ export default function HomePage() {
                   <option value="">—</option>
                   {YES_NO_NOT_SURE.map((option) => (
                     <option key={option} value={option}>
-                      {yesNoNotSureLabel(option)}
+                      {yesNoNotSureLabel(option, t)}
                     </option>
                   ))}
                 </select>

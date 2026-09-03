@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getMessages } from "@/app/lib/i18n";
-
-const t = getMessages();
+import { useLocale } from "@/app/lib/LocaleContext";
 
 interface Voyage {
   id: number;
@@ -45,6 +43,7 @@ export default function DaysInput({
   hint,
   required,
 }: DaysInputProps) {
+  const { t } = useLocale();
   const [mode, setMode] = useState<"manual" | "voyages">("manual");
   const [voyages, setVoyages] = useState<Voyage[]>([
     { id: voyageIdCounter++, embarkation: "", disembarkation: "" },

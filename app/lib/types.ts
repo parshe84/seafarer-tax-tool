@@ -1,3 +1,5 @@
+import type { Locale } from "@/app/lib/i18n";
+
 export const COUNTRIES = [
   "Philippines",
   "Ukraine",
@@ -34,6 +36,8 @@ export interface CalculatorInput {
   vesselInternationalTransport?: YesNoNotSure;
   /** Poland exemption test only: shipowner's actual management/head office is in a country with a DTT with Poland. */
   shipownerInDttCountry?: YesNoNotSure;
+  /** UI language the request was made in. Not yet used to localize the response — see TODO in app/api/calculate/route.ts. */
+  locale?: Locale;
 }
 
 export interface ChecklistItem {

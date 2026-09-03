@@ -38,6 +38,21 @@ body {
   padding: 24px 16px 48px;
 }
 
+.site-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 16px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.language-switcher {
+  width: auto;
+  padding: 6px 28px 6px 10px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
 .container {
   width: 100%;
   max-width: var(--max-width);
@@ -399,7 +414,8 @@ select:focus {
   .btn,
   .footer-actions,
   .link-button,
-  .notify-card {
+  .notify-card,
+  .site-header {
     display: none !important;
   }
 

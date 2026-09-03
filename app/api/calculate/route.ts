@@ -7,7 +7,7 @@ import type {
   YesNoNotSure,
 } from "@/app/lib/types";
 import { FAMILY_LOCATIONS, YES_NO_NOT_SURE } from "@/app/lib/types";
-import { getMessages } from "@/app/lib/i18n";
+import { getMessages, locales, type Locale } from "@/app/lib/i18n";
 
 const t = getMessages();
 
@@ -15,10 +15,15 @@ const t = getMessages();
 // tax rule bases for the remaining countries (Indonesia / Croatia / ...),
 // one at a time. Philippines, Ukraine, India and Poland are implemented
 // below as real examples.
-// TODO (i18n): once real rule content exists for a country, its
-// checklist/disclaimer text will need to be localized per locale together
-// with that content — a separate concern from the generic UI strings in
-// messages/*.json, which this file already reads for its own error text.
+// TODO (i18n): the client now sends `locale` (the UI language the request
+// was made in — see app/lib/LocaleContext.tsx), but every calculate*Result()
+// function below still returns hardcoded English checklist/disclaimer text
+// regardless of it. Once translated tax content exists for a country (e.g.
+// Filipino content for Philippines, Ukrainian for Ukraine), branch on
+// `body.locale` inside the relevant calculate*Result() function to return
+// that language's content, falling back to English for anything untranslated.
+// This is a separate concern from the generic UI strings in messages/*.json,
+// which this file already reads (in English) for its own error text.
 
 export async function POST(request: NextRequest) {
   let body: CalculatorInput;
@@ -53,7 +58,9 @@ export async function POST(request: NextRequest) {
         body.vesselInternationalTransport as YesNoNotSure
       )) ||
     (body.shipownerInDttCountry !== undefined &&
-      !YES_NO_NOT_SURE.includes(body.shipownerInDttCountry as YesNoNotSure))
+      !YES_NO_NOT_SURE.includes(body.shipownerInDttCountry as YesNoNotSure)) ||
+    (body.locale !== undefined &&
+      !locales.includes(body.locale as Locale))
   ) {
     return NextResponse.json({ error: t.api.validationError }, { status: 400 });
   }

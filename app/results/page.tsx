@@ -3,14 +3,12 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CalculatorResult } from "@/app/lib/types";
-import { getMessages } from "@/app/lib/i18n";
+import { useLocale } from "@/app/lib/LocaleContext";
 
 const RESULT_STORAGE_KEY = "seafarer-tax-result";
 const RESULT_CONTEXT_STORAGE_KEY = "seafarer-tax-result-context";
 const NOTIFY_ENDPOINT = "https://formspree.io/f/meaqkrgy";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const t = getMessages();
 
 interface ResultContext {
   citizenship: string;
@@ -21,6 +19,7 @@ type NotifyStatus = "idle" | "submitting" | "success" | "error";
 
 export default function ResultsPage() {
   const router = useRouter();
+  const { t } = useLocale();
   const [result, setResult] = useState<CalculatorResult | null>(null);
   const [context, setContext] = useState<ResultContext | null>(null);
   const [notFound, setNotFound] = useState(false);
